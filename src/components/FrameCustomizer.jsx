@@ -7,6 +7,7 @@ import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { FcFrame } from "react-icons/fc";
 import { HiOutlineUserGroup } from "react-icons/hi2";
 import { RiImageAddLine } from "react-icons/ri";
+import { RxDimensions } from "react-icons/rx";
 
 
 const gods = [
@@ -82,7 +83,6 @@ const FrameCustomizer = () => {
     selectedGods.forEach((god, index) => {
       combinedImages.push(god); // Add the god image
       if (index < selectedGods.length - 1 && selectedLamps.length > 0) {
-        //!* Add a lamp image between gods, if it's not the last god
         combinedImages.push(selectedLamps[index % selectedLamps.length]); // Cycle through lamps
       }
     });
@@ -91,15 +91,17 @@ const FrameCustomizer = () => {
       const isLamp = !item.imageUrl; // Check if the item is a lamp
       const imageUrl = isLamp ? lamps.find(l => l.name === item)?.imageUrl : item.imageUrl; // Get the imageUrl for lamps
   
-      //* Set dimensions based on whether the item is a god or a lamp
-
-      const width = isLamp ? godWidthPx * 0.95 : godWidthPx; // Example: lamps are 75% the width of gods
-      const height = isLamp ? godHeightPx * 0.75 : godHeightPx; // Example: lamps are 75% the height of gods
+      // Set the width of the god and lamp independently
+      const godWidth = godWidthPx; // Width of the god
+      const lampWidth = 80; // Fixed width for the lamp (in pixels)
+      
+      // Set height based on whether the item is a god or a lamp
+      const height = isLamp ? godHeightPx * 0.50 : godHeightPx; // Lamps are 50% the height of gods
   
       const top = isLamp 
-   ? (frameHeightPx - height) / 2 + (godHeightPx - height) / 2 + 100 // Adjust towards the bottom
-   : (frameHeightPx - height) / 2; // Center gods vertically
-
+        ? (frameHeightPx - height) / 2 + (godHeightPx - height) / 2 // Center lamps vertically with adjustment
+        : (frameHeightPx - height) / 2; // Center gods vertically
+  
       return (
         <Draggable key={item.id || item.name} draggableId={item.id || item.name} index={index}>
           {(provided) => (
@@ -109,15 +111,15 @@ const FrameCustomizer = () => {
               {...provided.dragHandleProps}
               className="absolute flex items-center justify-center"
               style={{
-                width: `${width}px`,
+                width: `${isLamp ? lampWidth : godWidth}px`, // Use fixed width for lamps
                 height: `${height}px`,
-                top: `${top}px`, // Use the calculated top position
-                left: `${(frameWidthPx - (combinedImages.length * width + (combinedImages.length - 1) * 20)) / 2 + index * (width + 20)}px`,
+                top: `${top}px`,
+                left: `${(frameWidthPx - (combinedImages.length * (isLamp ? lampWidth : godWidth) + (combinedImages.length - 1) * 20)) / 2 + index * ((isLamp ? lampWidth : godWidth) + 20)}px`,
               }}
             >
               {imageUrl ? (
                 <img src={imageUrl} alt={item.name || item} className="w-full h-full object-cover" />
-              ) : null} {/* Only render img if imageUrl is valid */}
+              ) : null}
             </div>
           )}
         </Draggable>
@@ -136,7 +138,7 @@ const FrameCustomizer = () => {
         onClick={() => setFramePreview(!framePreview)}
         className="bg-indigo-100 text-white px-1 py-2 rounded shadow hover:bg-indigo-600 transition flex items-center space-x-2"
       >
-        <FcFrame style={{ fontSize: '2rem', margin: "1px" }} />
+        <RxDimensions style={{ fontSize: '2rem', margin: "1px" }} />
         <span>{framePreview ? "" : ""}</span>
       </button>
       <h3>Dimensions</h3>

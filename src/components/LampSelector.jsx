@@ -26,8 +26,12 @@ const FrameCustomizer = () => {
   const [showCarousel, setShowCarousel] = useState(false);
   const [showGodSelector, setShowGodSelector] = useState(false);
   const [selectedGods, setSelectedGods] = useState([]);
-  const [selectedLamps, setSelectedLamps] = useState([]); // State for selected lamps
-  const [showLamps, setShowLamps] = useState(false); // State for lamp visibility
+
+  // State for selected lamps
+  const [selectedLamps, setSelectedLamps] = useState([]);
+
+  // State for lamp visibility
+  const [showLamps, setShowLamps] = useState(false);
 
   const scaleFactor = 20; // Conversion factor from inches to pixels
   const frameHeightPx = frameHeightInches * scaleFactor;
@@ -151,7 +155,8 @@ const FrameCustomizer = () => {
                   }}
                 >
                   <div className="relative border-none w-full h-full">
-                    {/* Four corner decorations */}
+
+                    {/*  Four corner decorations */}
                     <img
                       src="/images/corner2.png"
                       alt="Corner Decoration"
@@ -206,26 +211,28 @@ const FrameCustomizer = () => {
                       )}
                     </Draggable>
                   ))}
-                  
+
                   {/* Display selected lamps */}
+
+
                   {showLamps && (
                     lampImages.map((image, index) => (
-                      <img 
-                        key={index} 
-                        src={image} 
-                        alt={`Lamp ${index + 1}`} 
-                        className="absolute" 
+                      <img
+                        key={index}
+                        src={image}
+                        alt={`Lamp ${index + 1}`}
+                        className="absolute"
                         style={{
-                          width: '10%', // Adjust width as needed
-                          height: 'auto', // Maintain aspect ratio
-                          top: `${(frameHeightPx - 50) / 2}px`,
-                          left: `${(frameWidthPx - (lampImages.length * 50 + (lampImages.length - 1) * 20)) /  2 + index * (50 + 20)}px`,
-                          objectFit: 'contain', // Ensures the image maintains its aspect ratio
-                        }} 
+                          width: '1%',
+                          height: '20px',
+                          top: `${(frameHeightPx - 60) / 2}px`,
+                          left: `${(frameWidthPx - (lampImages.length * 50 + (lampImages.length - 1) * 20)) / 2 + index * (10 + 20)}px`, // Center horizontally
+                          objectFit: 'contain',
+                        }}
                       />
                     ))
                   )}
-                  
+
                   {provided.placeholder}
                 </div>
               )}
@@ -243,7 +250,7 @@ const FrameCustomizer = () => {
         </button>
 
         <button
-          onClick={() => setShowLamps(!showLamps)} // Toggle lamp visibility
+          onClick={() => setShowLamps(!showLamps)}
           className="bg-yellow-500 text-white px-4 py-2 rounded shadow hover:bg-yellow-600 transition"
         >
           {showLamps ? "Hide Lamps" : "Show Lamps"}
@@ -282,9 +289,8 @@ const FrameCustomizer = () => {
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
-                            className={`p-4 border rounded cursor-pointer hover:bg-gray-200 flex flex-col items-center ${
-                              selectedGods.includes(god) ? "border-purple-600" : "border-gray-300"
-                            }`}
+                            className={`p-4 border rounded cursor-pointer hover:bg-gray-200 flex flex-col items-center ${selectedGods.includes(god) ? "border-purple-600" : "border-gray-300"
+                              }`}
                             onClick={() => handleSelectGod(god)}
                           >
                             <img src={god.imageUrl} alt={god.name} className="w-16 h-16 mb-2" />
